@@ -1,275 +1,342 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Fragment Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
-    <title>Поиск в книге</title>
 
 </head>
 <body>
-<!-- Шапка -->
-<header class="header">
-    <button class="menu-btn" id="menuBtn" aria-label="Меню">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-    <h1>Поиск в книге</h1>
-</header>
+<div class="container">
+    <header>
+        <h1>Book Fragment Search</h1>
+        <p class="subtitle">Search for specific text fragments within classic literature</p>
+    </header>
 
-<!-- Затемнение фона при открытом меню -->
-<div class="menu-backdrop" id="menuBackdrop"></div>
+    <main>
+        <section class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter text to search...">
+                <button class="btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
 
-<!-- Боковое меню -->
-<nav class="menu-overlay" id="menuOverlay">
-    <div class="menu-content">
-        <div class="menu-header">
-            <h3>Меню</h3>
-        </div>
-        <div class="menu-item" data-section="home">
-            <i>🏠</i>
-            <span>Главная</span>
-        </div>
-        <div class="menu-item" data-section="search">
-            <i>🔍</i>
-            <span>Поиск</span>
-        </div>
-        <div class="menu-item" data-section="favorites">
-            <i>❤️</i>
-            <span>Любимые книги</span>
-        </div>
-    </div>
-    <button class="close-menu" id="closeMenu">×</button>
-</nav>
-
-<!-- Основной контент -->
-<main class="main-content">
-    <!-- Форма поиска -->
-    <section class="search-form">
-        <h2>Найти фрагмент в книге</h2>
-        <div class="search-input-group">
-            <input
-                    type="text"
-                    class="search-input"
-                    placeholder="Введите название книги или фрагмент..."
-                    id="searchInput"
-            >
-            <button class="search-btn" id="searchBtn">
-                Найти
-            </button>
-        </div>
-    </section>
-
-    <!-- Результаты поиска -->
-    <section class="results-section">
-        <h3>Результаты поиска</h3>
-        <div id="resultsContainer">
-            <!-- Здесь будут отображаться результаты -->
-            <div class="fragment-card">
-                <div class="fragment-title">Мастер и Маргарита - Глава 1</div>
-                <div class="fragment-text">«...никогда не разговаривайте с неизвестными...» — знаменитая фраза Воланда,
-                    обращенная к Берлиозу и Бездомному на Патриарших прудах.
+            <div class="options">
+                <div class="option-group">
+                    <input type="checkbox" id="caseSensitive" checked>
+                    <label for="caseSensitive">Case Sensitive</label>
                 </div>
-                <div class="fragment-meta">
-                    <span>📖 М. Булгаков</span>
-                    <span>📄 стр. 12</span>
+
+                <div class="option-group">
+                    <input type="checkbox" id="wholeWords">
+                    <label for="wholeWords">Whole Words Only</label>
+                </div>
+
+                <div class="option-group">
+                    <input type="checkbox" id="highlightAll" checked>
+                    <label for="highlightAll">Highlight All Matches</label>
                 </div>
             </div>
-            <div class="fragment-card">
-                <div class="fragment-title">Преступление и наказание - Часть 1</div>
-                <div class="fragment-text">«Тварь ли я дрожащая или право имею?» — размышления Раскольникова перед
-                    преступлением.
-                </div>
-                <div class="fragment-meta">
-                    <span>📖 Ф. Достоевский</span>
-                    <span>📄 стр. 45</span>
-                </div>
-            </div>
-            <div class="fragment-card">
-                <div class="fragment-title">Война и мир - Том 1</div>
-                <div class="fragment-text">«...нет величия там, где нет простоты, добра и правды...» — размышления о
-                    Кутузове.
-                </div>
-                <div class="fragment-meta">
-                    <span>📖 Л. Толстой</span>
-                    <span>📄 стр. 328</span>
+        </section>
+
+        <section class="results-container">
+            <div class="results-header">
+                <div class="result-count" id="resultCount">Found 0 matches</div>
+                <div class="sort-options">
+                    <select id="sortBy">
+                        <option value="position">Sort by Position</option>
+                        <option value="relevance">Sort by Relevance</option>
+                    </select>
                 </div>
             </div>
-        </div>
-    </section>
-</main>
+
+            <div class="book-content" id="bookContent">
+                <!-- Book content will be dynamically inserted here -->
+            </div>
+
+            <div class="pagination" id="pagination">
+                <!-- Pagination buttons will be generated here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Book Fragment Search Tool &copy; 2023 | Minimalist Design</p>
+    </footer>
+</div>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuBtn = document.getElementById('menuBtn');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const menuBackdrop = document.getElementById('menuBackdrop');
-            const closeMenu = document.getElementById('closeMenu');
-            const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            const resultsContainer = document.getElementById('resultsContainer');
+        // Sample book content (excerpt from "Pride and Prejudice")
+        const bookText = `
+        It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.
 
-            // Пример базы данных фрагментов
-            const fragments = [
-                {
-                    title: 'Мастер и Маргарита - Глава 1',
-                    text: '«...никогда не разговаривайте с неизвестными...» — знаменитая фраза Воланда, обращенная к Берлиозу и Бездомному на Патриарших прудах.',
-                    author: 'М. Булгаков',
-                    page: 12
-                },
-                {
-                    title: 'Преступление и наказание - Часть 1',
-                    text: '«Тварь ли я дрожащая или право имею?» — размышления Раскольникова перед преступлением.',
-                    author: 'Ф. Достоевский',
-                    page: 45
-                },
-                {
-                    title: 'Война и мир - Том 1',
-                    text: '«...нет величия там, где нет простоты, добра и правды...» — размышления о Кутузове.',
-                    author: 'Л. Толстой',
-                    page: 328
-                },
-                {
-                    title: 'Анна Каренина - Часть 1',
-                    text: '«Все счастливые семьи похожи друг на друга, каждая несчастливая семья несчастлива по-своему».',
-                    author: 'Л. Толстой',
-                    page: 1
-                },
-                {
-                    title: 'Евгений Онегин - Глава 1',
-                    text: '«Мой дядя самых честных правил, когда не в шутку занемог...»',
-                    author: 'А. Пушкин',
-                    page: 3
-                }
-            ];
+        However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered as the rightful property of some one or other of their daughters.
 
-            // Функция открытия меню
-            function openMenu() {
-                menuOverlay.classList.add('active');
-                menuBackdrop.classList.add('active');
-                menuBtn.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
+        "My dear Mr. Bennet," said his lady to him one day, "have you heard that Netherfield Park is let at last?"
 
-            // Функция закрытия меню
-            function closeMenuFunc() {
-                menuOverlay.classList.remove('active');
-                menuBackdrop.classList.remove('active');
-                menuBtn.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+        Mr. Bennet replied that he had not.
 
-            // Обработчики для меню
-            menuBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (menuOverlay.classList.contains('active')) {
-                    closeMenuFunc();
-                } else {
-                    openMenu();
-                }
-            });
+        "But it is," returned she; "for Mrs. Long has just been here, and she told me all about it."
 
-            menuBackdrop.addEventListener('click', closeMenuFunc);
+        Mr. Bennet made no answer.
 
-            if (closeMenu) {
-                closeMenu.addEventListener('click', closeMenuFunc);
-            }
+        "Do not you want to know who has taken it?" cried his wife impatiently.
 
-            // Закрытие по ESC
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
-                    closeMenuFunc();
-                }
-            });
+        "You want to tell me, and I have no objection to hearing it."
 
-            // Обработка кликов по пунктам меню
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const section = this.dataset.section;
+        This was invitation enough.
 
-                    // Подсветка активного пункта
-                    document.querySelectorAll('.menu-item').forEach(i => {
-                        i.style.backgroundColor = '';
-                        i.style.color = '';
-                    });
+        "Why, my dear, you must know, Mrs. Long says that Netherfield is taken by a young man of large fortune from the north of England; that he came down on Monday in a chaise and four to see the place, and was so much delighted with it that he agreed with Mr. Morris immediately; that he is to take possession before Michaelmas, and some of his servants are to be in the house by the end of next week."
 
-                    this.style.backgroundColor = '#f0f0f0';
-                    this.style.color = '#3498db';
+        "What is his name?"
 
-                    // Здесь можно добавить навигацию по разделам
-                    console.log('Переход в раздел:', section);
+        "Bingley."
 
-                    // Закрываем меню после выбора (на мобильных)
-                    if (window.innerWidth <= 768) {
-                        closeMenuFunc();
-                    }
-                });
-            });
+        "Is he married or single?"
 
-            // Функция поиска
-            function performSearch() {
-                const query = searchInput.value.toLowerCase().trim();
+        "Oh! Single, my dear, to be sure! A single man of large fortune; four or five thousand a year. What a fine thing for our girls!"
 
-                if (query === '') {
-                    // Если поиск пустой, показываем все фрагменты
-                    displayResults(fragments);
-                    return;
-                }
+        "How so? How can it affect them?"
 
-                // Фильтруем фрагменты по поисковому запросу
-                const filtered = fragments.filter(fragment => {
-                    return fragment.title.toLowerCase().includes(query) ||
-                           fragment.text.toLowerCase().includes(query) ||
-                           fragment.author.toLowerCase().includes(query);
-                });
+        "My dear Mr. Bennet," replied his wife, "how can you be so tiresome! You must know that I am thinking of his marrying one of them."
 
-                displayResults(filtered);
-            }
+        "Is that his design in settling here?"
 
-            // Функция отображения результатов
-            function displayResults(results) {
-                if (results.length === 0) {
-                    resultsContainer.innerHTML = `
-                        <div class="no-results">
-                            <p>😕 Ничего не найдено</p>
-                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Попробуйте изменить поисковый запрос</p>
-                        </div>
-                    `;
-                    return;
-                }
+        "Design! Nonsense, how can you talk so! But it is very likely that he may fall in love with one of them, and therefore you must visit him as soon as he comes."
 
-                resultsContainer.innerHTML = results.map(fragment => `
-                    <div class="fragment-card">
-                        <div class="fragment-title">${fragment.title}</div>
-                        <div class="fragment-text">${fragment.text}</div>
-                        <div class="fragment-meta">
-                            <span>📖 ${fragment.author}</span>
-                            <span>📄 стр. ${fragment.page}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
+        "I see no occasion for that. You and the girls may go, or you may send them by themselves, which perhaps will be still better, for as you are as handsome as any of them, Mr. Bingley might like you the best of the party."
 
-            // Обработчики поиска
+        "My dear, you flatter me. I certainly have had my share of beauty, but I do not pretend to be anything extraordinary now. When a woman has five grown-up daughters, she ought to give over thinking of her own beauty."
+
+        "In such cases, a woman has not often much beauty to think of."
+
+        "But, my dear, you must indeed go and see Mr. Bingley when he comes into the neighbourhood."
+
+        "It is more than I engage for, I assure you."
+
+        "But consider your daughters. Only think what an establishment it would be for one of them. Sir William and Lady Lucas are determined to go, merely on that account, for in general you know they visit no new comers. Indeed you must go, for it will be impossible for us to visit him, if you do not."
+
+        "You are over-scrupulous surely. I dare say Mr. Bingley will be very glad to see you; and I will send a few lines by you to assure him of my hearty consent to his marrying whichever he chooses of the girls; though I must throw in a good word for my little Lizzy."
+
+        "I desire you will do no such thing. Lizzy is not a bit better than the others; and I am sure she is not half so handsome as Jane, nor half so good-humoured as Lydia. But you always liked her because she is clever."
+
+        "We all know that he is clever," replied Mr. Bennet; "but it is sometimes a disadvantage to be so very ready. She has sometimes great impudence."
+
+        "I hope Mr. Bingley will like her, said his wife resignedly.
+
+        "I am not at all concerned. He may like her, if he dare."
+
+        "But I am sure she will never suit him. He is a most charming young man, and I should be sorry to think so ill of him, as to suppose he would stoop to such a disgrace."
+
+        "If there had been any young men concerned in the thing, I should have thought of it; but I could never hear of any gentleman in the neighbourhood concerned about it."
+
+        "My dear, the country is full of gentlemen."
+
+        "That is exactly what makes your carelessness the greater. I have nothing to do with gentlemen in the neighbourhood. If a stranger comes near enough, he may recommend himself to our notice; but we shall not trouble ourselves to look out for people."
+
+        "Depend upon it, my dear, that when there are twenty, you will find me out every one of them."
+
+        "The sooner the better. I hope he will fall in love with one of them before the winter is over. I have a great mind to pay him a visit tomorrow, and make myself perfectly agreeable."
+
+        "I should be sorry to be the means of making any gentleman so extremely happy. But upon my honour, I do not think Mr. Bingley so very nice. There is something in his countenance that does not please me. Besides, he may fall in love with some other girl."
+
+        "To be sure. Yes, to be sure. I did not think of that. Well, there is no harm done. Perhaps, after all, he may fall in love with one of the younger ones, and leave the eldest to shift for herself. If he marries Charlotte Lucas, it will be a very good thing for her."
+
+        "Charlotte Lucas! My dear, he cannot stand long in need of a wife if he gets Charlotte Lucas for his wife."
+
+        "The wisest and the best of all my daughters," interrupted her husband, "but at the same time, the most ill-judged and the most troublesome. If she succeeds in hooking him, it will be a triumph indeed."
+
+        "Mr. Bennet, how can you abuse your own children in such a way? You take delight in vexing me. You have no compassion for my poor nerves."
+
+        "You mistake me, my dear. I have a high respect for your nerves. They are my old friends. I have heard you mention them with consideration these twenty years at least."
+
+        "Ah, you do not know what I suffer."
+
+        "But I hope you will get over it, and live to see many young men of four thousand a year come into the neighbourhood."
+
+        "It will be no use to us, if twenty such should come since you will not visit them."
+
+        "Depend upon it, my dear, that when there are twenty, you will find me out every one of them."
+        `;
+
+        // DOM Elements
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const bookContent = document.getElementById('bookContent');
+        const resultCount = document.getElementById('resultCount');
+        const pagination = document.getElementById('pagination');
+        const caseSensitive = document.getElementById('caseSensitive');
+        const wholeWords = document.getElementById('wholeWords');
+        const highlightAll = document.getElementById('highlightAll');
+        const sortBy = document.getElementById('sortBy');
+
+        // State variables
+        let currentSearchTerm = '';
+        let searchResults = [];
+        let currentPage = 1;
+        const resultsPerPage = 5;
+
+        // Initialize the page
+        function init() {
+            bookContent.innerHTML = formatText(bookText);
             searchBtn.addEventListener('click', performSearch);
-
-            searchInput.addEventListener('keypress', (e) => {
+            searchInput.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') {
                     performSearch();
                 }
             });
 
-            // Адаптивное поведение при изменении размера окна
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768 && menuOverlay.classList.contains('active')) {
-                    closeMenuFunc();
+            // Set up option listeners
+            [caseSensitive, wholeWords, highlightAll, sortBy].forEach(option => {
+                option.addEventListener('change', performSearch);
+            });
+        }
+
+        // Format text with paragraphs
+        function formatText(text) {
+            return text.split('\n\n').map(paragraph =>
+                `<p>${paragraph.trim()}</p>`
+            ).join('');
+        }
+
+        // Perform the search
+        function performSearch() {
+            currentSearchTerm = searchInput.value.trim();
+
+            if (!currentSearchTerm) {
+                bookContent.innerHTML = formatText(bookText);
+                resultCount.textContent = 'Found 0 matches';
+                pagination.innerHTML = '';
+                return;
+            }
+
+            // Create regex based on options
+            let flags = 'g';
+            if (!caseSensitive.checked) flags += 'i';
+
+            let searchTerm = currentSearchTerm;
+            if (wholeWords.checked) {
+                searchTerm = '\\b' + searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b';
+            } else {
+                searchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            try {
+                const regex = new RegExp(searchTerm, flags);
+                searchResults = [];
+
+                // Find all matches
+                let match;
+                while ((match = regex.exec(bookText)) !== null) {
+                    searchResults.push({
+                        index: match.index,
+                        length: match[0].length,
+                        text: match[0]
+                    });
+                }
+
+                // Update result count
+                resultCount.textContent = `Found ${searchResults.length} match${searchResults.length !== 1 ? 'es' : ''}`;
+
+                // Display results
+                displayResults();
+                renderPagination();
+            } catch (e) {
+                console.error('Invalid regex:', e);
+                bookContent.innerHTML = '<div class="no-results"><i class="fas fa-exclamation-triangle"></i><p>Invalid search pattern</p></div>';
+                resultCount.textContent = 'Found 0 matches';
+                pagination.innerHTML = '';
+            }
+        }
+
+        // Display search results
+        function displayResults() {
+            if (searchResults.length === 0) {
+                bookContent.innerHTML = '<div class="no-results"><i class="fas fa-search"></i><p>No matches found for your search term.</p></div>';
+                return;
+            }
+
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * resultsPerPage;
+            const endIndex = Math.min(startIndex + resultsPerPage, searchResults.length);
+            const pageResults = searchResults.slice(startIndex, endIndex);
+
+            // Highlight matches in text
+            let highlightedText = bookText;
+
+            if (highlightAll.checked) {
+                // Highlight all matches
+                highlightedText = bookText.replace(new RegExp(currentSearchTerm, 'gi'), match =>
+                    `<span class="highlight">${match}</span>`
+                );
+            } else if (pageResults.length > 0) {
+                // Highlight only current page matches
+                const firstMatch = pageResults[0];
+                const beforeMatch = bookText.substring(0, firstMatch.index);
+                const matchText = bookText.substring(firstMatch.index, firstMatch.index + firstMatch.length);
+                const afterMatch = bookText.substring(firstMatch.index + firstMatch.length);
+
+                highlightedText = `${beforeMatch}<span class="highlight">${matchText}</span>${afterMatch}`;
+            }
+
+            bookContent.innerHTML = formatText(highlightedText);
+        }
+
+        // Render pagination controls
+        function renderPagination() {
+            pagination.innerHTML = '';
+
+            if (searchResults.length === 0) return;
+
+            const pageCount = Math.ceil(searchResults.length / resultsPerPage);
+
+            if (pageCount <= 1) return;
+
+            // Previous button
+            const prevBtn = document.createElement('div');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayResults();
+                    renderPagination();
                 }
             });
+            pagination.appendChild(prevBtn);
 
-            // Инициализация с примером данных
-            displayResults(fragments);
-        });
+            // Page buttons
+            for (let i = 1; i <= pageCount; i++) {
+                const pageBtn = document.createElement('div');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    displayResults();
+                    renderPagination();
+                });
+                pagination.appendChild(pageBtn);
+            }
+
+            // Next button
+            const nextBtn = document.createElement('div');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < pageCount) {
+                    currentPage++;
+                    displayResults();
+                    renderPagination();
+                }
+            });
+            pagination.appendChild(nextBtn);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', init);
 
 </script>
 </body>
