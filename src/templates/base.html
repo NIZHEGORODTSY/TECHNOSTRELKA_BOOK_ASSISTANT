@@ -1,9 +1,276 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="utf-8"/>
-    </head>
-    <body>
-        {% block content %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+    <title>Поиск в книге</title>
+
+</head>
+<body>
+<!-- Шапка -->
+<header class="header">
+    <button class="menu-btn" id="menuBtn" aria-label="Меню">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <h1>Поиск в книге</h1>
+</header>
+
+<!-- Затемнение фона при открытом меню -->
+<div class="menu-backdrop" id="menuBackdrop"></div>
+
+<!-- Боковое меню -->
+<nav class="menu-overlay" id="menuOverlay">
+    <div class="menu-content">
+        <div class="menu-header">
+            <h3>Меню</h3>
+        </div>
+        <div class="menu-item" data-section="home">
+            <i>🏠</i>
+            <span>Главная</span>
+        </div>
+        <div class="menu-item" data-section="search">
+            <i>🔍</i>
+            <span>Поиск</span>
+        </div>
+        <div class="menu-item" data-section="favorites">
+            <i>❤️</i>
+            <span>Любимые книги</span>
+        </div>
+    </div>
+    <button class="close-menu" id="closeMenu">×</button>
+</nav>
+
+<!-- Основной контент -->
+<main class="main-content">
+    <!-- Форма поиска -->
+    <section class="search-form">
+        <h2>Найти фрагмент в книге</h2>
+        <div class="search-input-group">
+            <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Введите название книги или фрагмент..."
+                    id="searchInput"
+            >
+            <button class="search-btn" id="searchBtn">
+                Найти
+            </button>
+        </div>
+    </section>
+
+    <!-- Результаты поиска -->
+    <section class="results-section">
+        <h3>Результаты поиска</h3>
+        <div id="resultsContainer">
+            <!-- Здесь будут отображаться результаты -->
+            <div class="fragment-card">
+                <div class="fragment-title">Мастер и Маргарита - Глава 1</div>
+                <div class="fragment-text">«...никогда не разговаривайте с неизвестными...» — знаменитая фраза Воланда,
+                    обращенная к Берлиозу и Бездомному на Патриарших прудах.
+                </div>
+                <div class="fragment-meta">
+                    <span>📖 М. Булгаков</span>
+                    <span>📄 стр. 12</span>
+                </div>
+            </div>
+            <div class="fragment-card">
+                <div class="fragment-title">Преступление и наказание - Часть 1</div>
+                <div class="fragment-text">«Тварь ли я дрожащая или право имею?» — размышления Раскольникова перед
+                    преступлением.
+                </div>
+                <div class="fragment-meta">
+                    <span>📖 Ф. Достоевский</span>
+                    <span>📄 стр. 45</span>
+                </div>
+            </div>
+            <div class="fragment-card">
+                <div class="fragment-title">Война и мир - Том 1</div>
+                <div class="fragment-text">«...нет величия там, где нет простоты, добра и правды...» — размышления о
+                    Кутузове.
+                </div>
+                <div class="fragment-meta">
+                    <span>📖 Л. Толстой</span>
+                    <span>📄 стр. 328</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.getElementById('menuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+            const closeMenu = document.getElementById('closeMenu');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            // Пример базы данных фрагментов
+            const fragments = [
+                {
+                    title: 'Мастер и Маргарита - Глава 1',
+                    text: '«...никогда не разговаривайте с неизвестными...» — знаменитая фраза Воланда, обращенная к Берлиозу и Бездомному на Патриарших прудах.',
+                    author: 'М. Булгаков',
+                    page: 12
+                },
+                {
+                    title: 'Преступление и наказание - Часть 1',
+                    text: '«Тварь ли я дрожащая или право имею?» — размышления Раскольникова перед преступлением.',
+                    author: 'Ф. Достоевский',
+                    page: 45
+                },
+                {
+                    title: 'Война и мир - Том 1',
+                    text: '«...нет величия там, где нет простоты, добра и правды...» — размышления о Кутузове.',
+                    author: 'Л. Толстой',
+                    page: 328
+                },
+                {
+                    title: 'Анна Каренина - Часть 1',
+                    text: '«Все счастливые семьи похожи друг на друга, каждая несчастливая семья несчастлива по-своему».',
+                    author: 'Л. Толстой',
+                    page: 1
+                },
+                {
+                    title: 'Евгений Онегин - Глава 1',
+                    text: '«Мой дядя самых честных правил, когда не в шутку занемог...»',
+                    author: 'А. Пушкин',
+                    page: 3
+                }
+            ];
+
+            // Функция открытия меню
+            function openMenu() {
+                menuOverlay.classList.add('active');
+                menuBackdrop.classList.add('active');
+                menuBtn.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Функция закрытия меню
+            function closeMenuFunc() {
+                menuOverlay.classList.remove('active');
+                menuBackdrop.classList.remove('active');
+                menuBtn.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Обработчики для меню
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (menuOverlay.classList.contains('active')) {
+                    closeMenuFunc();
+                } else {
+                    openMenu();
+                }
+            });
+
+            menuBackdrop.addEventListener('click', closeMenuFunc);
+
+            if (closeMenu) {
+                closeMenu.addEventListener('click', closeMenuFunc);
+            }
+
+            // Закрытие по ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+                    closeMenuFunc();
+                }
+            });
+
+            // Обработка кликов по пунктам меню
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.dataset.section;
+
+                    // Подсветка активного пункта
+                    document.querySelectorAll('.menu-item').forEach(i => {
+                        i.style.backgroundColor = '';
+                        i.style.color = '';
+                    });
+
+                    this.style.backgroundColor = '#f0f0f0';
+                    this.style.color = '#3498db';
+
+                    // Здесь можно добавить навигацию по разделам
+                    console.log('Переход в раздел:', section);
+
+                    // Закрываем меню после выбора (на мобильных)
+                    if (window.innerWidth <= 768) {
+                        closeMenuFunc();
+                    }
+                });
+            });
+
+            // Функция поиска
+            function performSearch() {
+                const query = searchInput.value.toLowerCase().trim();
+
+                if (query === '') {
+                    // Если поиск пустой, показываем все фрагменты
+                    displayResults(fragments);
+                    return;
+                }
+
+                // Фильтруем фрагменты по поисковому запросу
+                const filtered = fragments.filter(fragment => {
+                    return fragment.title.toLowerCase().includes(query) ||
+                           fragment.text.toLowerCase().includes(query) ||
+                           fragment.author.toLowerCase().includes(query);
+                });
+
+                displayResults(filtered);
+            }
+
+            // Функция отображения результатов
+            function displayResults(results) {
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = `
+                        <div class="no-results">
+                            <p>😕 Ничего не найдено</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Попробуйте изменить поисковый запрос</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                resultsContainer.innerHTML = results.map(fragment => `
+                    <div class="fragment-card">
+                        <div class="fragment-title">${fragment.title}</div>
+                        <div class="fragment-text">${fragment.text}</div>
+                        <div class="fragment-meta">
+                            <span>📖 ${fragment.author}</span>
+                            <span>📄 стр. ${fragment.page}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Обработчики поиска
+            searchBtn.addEventListener('click', performSearch);
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Адаптивное поведение при изменении размера окна
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && menuOverlay.classList.contains('active')) {
+                    closeMenuFunc();
+                }
+            });
+
+            // Инициализация с примером данных
+            displayResults(fragments);
+        });
+
+</script>
+</body>
 </html>

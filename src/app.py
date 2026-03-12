@@ -13,8 +13,15 @@ app = Flask(
     template_folder=str(TEMPLATES_DIR)
 )
 
+
+@app.route('/')
+def main():
+    return render_template('base.html')
+
+
 @app.route('/health')
 def dummy():
     return render_template('healthcheck.html')
+
 
 app.run('0.0.0.0', port=5000, debug=True)
