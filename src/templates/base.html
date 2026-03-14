@@ -35,15 +35,18 @@
                 <div class="result-count" id="resultCount">{{item}}</div>
             </div>
             {% endfor %}
-            {% elif answer == '1'%}
             <div class="results-header">
-                <div class="result-count" id="resultCount"></div>
+                <div class="result-count" id="resultCount">Затрачено времени: {{time}}</div>
             </div>
+            {% elif answer == '1'%}
+
             {% else %}
             <div class="results-header">
                 <div class="result-count" id="resultCount">К сожалению, ничего не найдено</div>
             </div>
             {% endif %}
+
+
 
 
         </section>
