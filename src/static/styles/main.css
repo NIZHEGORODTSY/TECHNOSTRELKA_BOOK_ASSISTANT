@@ -254,3 +254,67 @@
                 font-size: 1rem;
             }
         }
+        /* Add this to your existing styles.css */
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 20px 25px;
+    border-radius: 10px;
+    background: linear-gradient(120deg, #f8f9fa 0%, #e9f7fe 100%);
+    border: 1px solid #e1f0fa;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.results-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--secondary), #2980b9);
+    transition: all 0.4s ease;
+}
+
+.results-header:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+}
+
+.results-header:hover::before {
+    width: 8px;
+}
+
+.result-count {
+    font-size: 1.2rem;
+    color: var(--dark);
+    font-weight: 500;
+    z-index: 1;
+    position: relative;
+}
+
+/* Special styling for the "nothing found" message */
+.results-header.no-results {
+    background: linear-gradient(120deg, #fdf2f2 0%, #fff7f7 100%);
+    border-color: #fadbd8;
+}
+
+.results-header.no-results::before {
+    background: linear-gradient(to bottom, var(--accent), #c0392b);
+}
+
+/* Time display styling */
+.results-header.time-display {
+    background: linear-gradient(120deg, #f0f9f4 0%, #e8f8f5 100%);
+    border-color: #d1f2eb;
+}
+
+.results-header.time-display::before {
+    background: linear-gradient(to bottom, #27ae60, #229954);
+}
