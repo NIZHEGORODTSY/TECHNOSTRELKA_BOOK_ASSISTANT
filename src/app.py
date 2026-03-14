@@ -39,10 +39,11 @@ def main():
             context=context,
             question=user_text,
         )
+        print(user_text)
         print(answer)
         return render_template('base.html', answer=format_answer(answer))
 
-    return render_template('base.html')
+    return render_template('base.html', answer='1')
 
 
 # @app.route('/health')

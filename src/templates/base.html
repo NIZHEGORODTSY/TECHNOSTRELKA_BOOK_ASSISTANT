@@ -18,7 +18,8 @@
         <section class="search-container">
             <form method="POST" action="/">
                 <div class="search-box">
-                    <input name="user_text" type="text" class="search-input" id="searchInput" placeholder="Enter text to search...">
+                    <input name="user_text" type="text" class="search-input" id="searchInput"
+                           placeholder="Enter text to search...">
                     <button type="submit" class="btn" id="searchBtn">
                         <i class="fas fa-search"></i> Search
                     </button>
@@ -27,11 +28,22 @@
         </section>
 
         <section class="results-container">
+
+            {% if answer and answer != '1' %}
             {% for item in answer %}
-                <div class="results-header">
-                    <div class="result-count" id="resultCount">{{item}}</div>
-                </div>
+            <div class="results-header">
+                <div class="result-count" id="resultCount">{{item}}</div>
+            </div>
             {% endfor %}
+            {% elif answer == '1'%}
+            <div class="results-header">
+                <div class="result-count" id="resultCount"></div>
+            </div>
+            {% else %}
+            <div class="results-header">
+                <div class="result-count" id="resultCount">К сожалению, ничего не найдено</div>
+            </div>
+            {% endif %}
 
 
         </section>

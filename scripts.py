@@ -3,5 +3,5 @@
 
 def format_answer(answer):
     data = answer.split('\n')
-    data = [x for x in data if len(x) != 0][1:]
+    data = [x for x in data if len(x) != 0]
     return data
