@@ -1,62 +1,45 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch
+from openai import OpenAI
 import os
 
+
+# NOTE: 
+# В ходе продолжительных экспериментов было принято решение отказаться от локального использования моделей hugging face из-за ОЧЕНЬ низкой скорости работы
+# Решено использовать api deepseek
 class ModelController:
-    def __init__(self, model_name: str):
-        self._tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self._model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=os.environ.get("CACHE_DIR"))
+    def __init__(self, temperature: float, max_completion_tokens: int = 150):
+        self._client = OpenAI(
+            api_key=os.environ.get("DEEPSEEK_API_KEY"),
+            base_url="https://api.deepseek.com",
+        )
+        self._model = "deepseek-chat"
+        self._temperature = temperature
+        self._max_completion_tokens = max_completion_tokens
 
-        self._device = "cuda" if torch.cuda.is_available() else "cpu"
-        self._model.to(self._device)
-        self._model.eval()
-    
-    def form_prompt(self, question: str) -> str:
-        """Формирование промпта для модели на основании переданного вопроса
-        
-        Keyword arguments:
-        \tquestion -- текст запроса
-        Return:
-        \tСформированный промпт
-        """
-        # NOTE: Пока для промпта используется тестовая заглушка
-        
-        # Контекст для модели
-        context_text = """
+    def generate(self, context: str, question: str):
+        messages=[
+            {
+                "role": "system",
+                "content": "Ты помощник по вопросам содержания книг"
+            },
+            {
+                "role": "system",
+                "content": f"""Прочитай текст и ответь на предложенный вопрос. Текст: {context}"""
+            },
+            {
+                "role": "user",
+                "content": question
+            }
+        ]
 
-Это был человек лет тридцати двух-трех от роду, среднего роста, приятной наружности, с темно-серыми глазами, но с отсутствием всякой определенной идеи, всякой сосредоточенности в чертах лица. Мысль гуляла вольной птицей по лицу, порхала в глазах, садилась на полуотворенные губы, пряталась в складках лба, потом совсем пропадала, и тогда во всем лице теплился ровный свет беспечности. С лица беспечность переходила в позы всего тела, даже в складки шлафрока.
-        """
-
-        prompt = f"Прочитай текст ниже и ответь на вопрос по нему.\n\nТекст:\n{context_text}\n\nВопрос: {question}\nОтвет:"
-
-        return prompt
-
-    def generate(self, prompt: str, max_new_tokens=50, temperature=0.7, top_k=50, top_p=0.95):
-        """Сгенерировать моделью ответ на промпт
-        
-        Keyword arguments:
-        \tprompt -- промпт
-        \t[max_new_tokens, temperature, top_k, top_p] -- параметры модели (опционально)
-        Return: 
-        \tОтвет, сгенерированный моделью
-        """
-        
-        inputs = self._tokenizer.encode(prompt, return_tensors="pt").to(self._device)
-        outputs = self._model.generate(
-            inputs,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            top_k=top_k,
-            top_p=top_p,
-            do_sample=True,
-            eos_token_id=self._tokenizer.eos_token_id,
-            pad_token_id=self._tokenizer.eos_token_id,
-            no_repeat_ngram_size=2,
+        response = self._client.chat.completions.create(
+            model=self._model,
+            messages=messages,
+            temperature=self._temperature,
+            max_completion_tokens=self._max_completion_tokens,
+            stream=False
         )
 
-        prompt_length = inputs.shape[1]  # Длина промпта в токенах
-        response_tokens = outputs[0][prompt_length:] # Обрезаем промпт
-
-        text = self._tokenizer.decode(response_tokens, skip_special_tokens=True)
-        return text
+        return response.choices[0].message.content
+        
+        
 
