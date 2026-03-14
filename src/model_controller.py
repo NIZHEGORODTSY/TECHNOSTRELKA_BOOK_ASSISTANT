@@ -1,10 +1,14 @@
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
 
-
-# NOTE: 
+# NOTE:
 # В ходе продолжительных экспериментов было принято решение отказаться от локального использования моделей hugging face из-за ОЧЕНЬ низкой скорости работы
 # Решено использовать api deepseek
+
+load_dotenv('_.env')
+
+
 class ModelController:
     def __init__(self, temperature: float, max_completion_tokens: int = 150):
         self._client = OpenAI(
@@ -16,7 +20,7 @@ class ModelController:
         self._max_completion_tokens = max_completion_tokens
 
     def generate(self, context: str, question: str):
-        messages=[
+        messages = [
             {
                 "role": "system",
                 "content": "Ты помощник по вопросам содержания книг"
@@ -40,6 +44,3 @@ class ModelController:
         )
 
         return response.choices[0].message.content
-        
-        
-
