@@ -19,8 +19,13 @@ app = Flask(
 mc = ModelController(temperature=1.3, max_completion_tokens=150)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def main():
+    return 'hello!'
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
     if request.method == 'POST':
         user_text = request.form['user_text']
         start_time = time.time()
@@ -30,8 +35,8 @@ def main():
         )
         end_time = time.time()
         delta = round(float(end_time - start_time), 1)
-        return render_template('base.html', answer=format_answer(answer), time=f'{str(delta)} сек.')
-    return render_template('base.html', answer='1')
+        return render_template('search.html', answer=format_answer(answer), time=f'{str(delta)} сек.')
+    return render_template('search.html', answer='1')
 
 
 # NOTE: тестовая функция для проверки работы модели

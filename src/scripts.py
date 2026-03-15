@@ -4,6 +4,7 @@
 
 import markdown
 
+
 def format_answer(answer):
     data = answer.split('\n')
     # data = [x for x in data if len(x) != 0]

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>Book Fragment Search</h1>
+    <p class="subtitle">Search for specific text fragments within classic literature</p>
+</header>
+<main>
+    <section class="search-container">
+        <form method="POST" action="/">
+            <div class="search-box">
+                <input name="user_text" type="text" class="search-input" id="searchInput"
+                       placeholder="Enter text to search...">
+                <button type="submit" class="btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="results-container">
+        {% if answer and answer != '1' %}
+        {% for item in answer %}
+        <div class="results-header">
+            <div class="result-count">{{item | safe}}</div>
+        </div>
+        {% endfor %}
+        <div class="results-header time-display">
+            <div class="result-count">Затрачено времени: {{time}}</div>
+        </div>
+        {% elif answer == '1' %}
+        {% else %}
+        <div class="results-header no-results">
+            <div class="result-count">К сожалению, ничего не найдено</div>
+        </div>
+        {% endif %}
+    </section>
+
+</main>
+
+{% endblock %}
