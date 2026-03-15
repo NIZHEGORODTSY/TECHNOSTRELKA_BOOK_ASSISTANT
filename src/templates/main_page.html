@@ -131,13 +131,12 @@
             window.location.href = "{{ url_for('search') }}";
         }
 
-    <script>
-        // Mobile menu toggle functionality
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
+    Mobile menu toggle functionality
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
 
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
+    menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
 
             // Animate hamburger icon
             const bars = menuToggle.querySelectorAll('.menu-bar');
@@ -182,7 +181,6 @@
                 }
             });
         });
-
 
 </script>
 
