@@ -67,7 +67,14 @@ def search_post():
 
 @app.route('/library', methods=['GET'])
 def show_lib():
-    return render_template('library.html')
+    _dict = pc.list_all_books()
+    _dict = {
+        "Л.Н.Толстой": ["Война и мир Том 1", "Война и мир Том 2", "Война и мир Том 3"],
+        "О.Генри": ["Дары волхвов"],
+        "К. Паустовский": ["Акварельные краски"]
+    }
+
+    return render_template('library.html', data = _dict)
 
 
 @app.route('/upload', methods=['POST'])

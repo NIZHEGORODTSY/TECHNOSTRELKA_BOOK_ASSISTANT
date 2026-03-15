@@ -4,7 +4,6 @@ from sentence_transformers import SentenceTransformer
 import uuid
 from dotenv import load_dotenv
 
-
 load_dotenv('_.env')
 
 
@@ -64,7 +63,7 @@ class PineconeController:
         self._index.upsert(vectors)
 
     def search_similar_chunks(self, question: str, top_k: int = 3, book_name: str = None, author_name: str = None) -> \
-    list[dict[str, str]]:
+            list[dict[str, str]]:
         """
         Ищет топ-K наиболее похожих chunk'ов на вопрос.
         Можно ограничить поиск конкретной книгой или автором.
