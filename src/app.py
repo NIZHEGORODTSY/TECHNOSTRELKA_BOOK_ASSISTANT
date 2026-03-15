@@ -36,14 +36,20 @@ def search_show():
 
 @app.route('/search', methods=['POST'])
 def search_post():
-    user_text = request.form['user_text']
-    result = pc.get_fragments('вопросик может не зайти)') # list[str] - найденные фрагменты
-    return render_template('search.html', answer=result)
+    user_question = request.form.get('user_question')
+    # TODO: временно None, потом доставать из формы
+    user_book = None
+    user_author = None
+    result = pc.search_similar_chunks(
+        question=user_question,
+        book_name=user_book,
+        author_name=user_author
+    ) # list[str] - найденные фрагменты
+    return render_template('search.html', chunks=result)
 
-@app.route('/library')
+@app.route('/library', methods=['GET'])
 def show_lib():
     return render_template('library.html')
-
 
 @app.route('/question', methods=['GET'])
 def question_show():
@@ -54,7 +60,7 @@ def question_post():
     user_text = request.form['user_text']
     start_time = time.time()
     answer = mc.generate(
-        context=get_context(),
+        context=get_context(), # get_context временно, потом будет mc.search_similar_chunks 
         question=user_text,
     )
     end_time = time.time()

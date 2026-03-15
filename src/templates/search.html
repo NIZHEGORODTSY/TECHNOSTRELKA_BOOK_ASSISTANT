@@ -5,7 +5,7 @@
     <section class="search-container">
         <form method="POST" action="/search">
             <div class="search-box">
-                <input name="user_text" type="text" class="search-input" id="searchInput"
+                <input name="user_question" type="text" class="search-input" id="searchInput"
                        placeholder="Enter text to search...">
                 <button type="submit" class="btn" id="searchBtn">
                     <i class="fas fa-search"></i> Search
@@ -15,16 +15,23 @@
     </section>
 
     <section class="results-container">
-        {% if answer and answer != '1' %}
-        {% for item in answer %}
+        {% if chunks and chunks != '1' %}
+        {% for chunk in chunks %}
         <div class="results-header">
-            <div class="result-count">{{item | safe}}</div>
+            <div class="result-count">
+                <ul style="padding-left: 5%; padding-right: 5%; padding-top: 0%; padding-bottom: 0%;">
+                    <li>{{ chunk["book"] }}</li>
+                    <li>Автор: {{ chunk["author"] }}</li>
+                    <li>{{ chunk["text"] }}</li>
+                </ul>
+                {{item | safe}}
+            </div>
         </div>
         {% endfor %}
         <div class="results-header time-display">
             <div class="result-count">Затрачено времени: {{time}}</div>
         </div>
-        {% elif answer == '1' %}
+        {% elif chunks == '1' %}
         {% else %}
         <div class="results-header no-results">
             <div class="result-count">К сожалению, ничего не найдено</div>

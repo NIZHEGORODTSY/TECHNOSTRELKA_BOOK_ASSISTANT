@@ -13,6 +13,7 @@ class ModelController:
         self._temperature = temperature
         self._max_completion_tokens = max_completion_tokens
 
+    # TODO: изменить промпт под формат чанков: Автор, Название книги, Текст фрагмента
     def generate(self, context: str, question: str):
         messages = [
             {

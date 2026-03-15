@@ -2,3 +2,5 @@ flask
 openai
 dotenv
 markdown
+pinecone
+sentence_transformers
