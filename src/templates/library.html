@@ -381,6 +381,8 @@
 
 
 
+
+
 </style>
 <section class="library-section">
     <div class="section-header">
@@ -463,12 +465,6 @@
             <label class="form-label" for="bookAuthor">Автор</label>
             <input type="text" id="bookAuthor" class="form-control" placeholder="Введите имя автора">
         </div>
-
-        <div class="form-group">
-            <label class="form-label" for="bookDescription">Описание</label>
-            <textarea id="bookDescription" class="form-control" placeholder="Краткое описание книги"></textarea>
-        </div>
-
         <div class="form-group">
             <label class="form-label">Файл книги</label>
             <div class="file-upload-area" id="dropArea">
@@ -476,10 +472,10 @@
                     <i class="fas fa-cloud-upload-alt"></i>
                 </div>
                 <p class="file-upload-text">Перетащите файл сюда или <strong>выберите файл</strong></p>
-                <p class="file-upload-text">Поддерживаемые форматы: TXT, PDF</p>
+                <p class="file-upload-text">Поддерживаемые форматы: TXT</p>
                 <div class="file-name" id="fileName">Файл не выбран</div>
             </div>
-            <input type="file" id="fileInput" accept=".txt,.pdf" style="display: none;">
+            <input type="file" id="fileInput" accept=".txt," style="display: none;">
         </div>
 
         <button type="submit" class="btn btn-success">
@@ -583,6 +579,8 @@
                 }
             });
         });
+
+
 
 
 
