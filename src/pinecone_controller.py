@@ -98,7 +98,7 @@ class PineconeController:
         return result
 
     # TODO: сформировать список вида list[dict[str, str]] {"book": "book_title", "author": "author_name"}
-    def list_all_books(self):
+    def list_all_books(self) -> dict[str, list[str]]:
         """
         Выводит список всех книг, которые есть в индексе Pinecone.
         """
@@ -107,32 +107,30 @@ class PineconeController:
         for batch in self._index.list():
             all_ids.extend(batch)
 
-        # if not all_ids:
-        #     print("В индексе пока нет книг.")
-        #     return []
-
         # Получаем данные по ID
         vectors = self._index.fetch(ids=all_ids)
 
-        # Извлекаем уникальные книги
-        books = set()
+        result: dict[str, list[str]] = {} # {"Автор": ["Названия", "книг"]}
+
         for vid, data in vectors["vectors"].items():
-            book_name = data["metadata"].get("book")
-            if book_name:
-                books.add(book_name)
+            book_author = data["metadata"].get("author")
+            if book_author not in result.keys():
+                result[book_author] = [data["metadata"].get("book")]
+            else:
+                book_title = data["metadata"].get("book")
+                if book_title not in result[book_author]:
+                    result[book_author].append(book_title)
+
+
+        # Извлекаем уникальные книги
+        # books = set()
+        # for vid, data in vectors["vectors"].items():
+        #     book_name = data["metadata"].get("book")
+        #     if book_name:
+        #         books.add(book_name)
 
         # print("Книги, загруженные в базу:")
-        for book in books:
-            print("-", book)
+        # for book in books:
+        #     print("-", book)
 
-        return list(books)
-
-    # NOTE: пока заглушка
-    def get_fragments(self, question: str) -> list:
-        return [
-            "абоба1",
-            "абоба2",
-            "абоба3",
-            "абоба4",
-            "абоба5",
-        ]
+        return result

@@ -111,13 +111,14 @@ def upload_file():
             # Сохраняем файл
             file.save(file_path)
 
-            with open(file_path, 'r') as f:
-                data = f.readlines()
-            book = ''
-            for el in data:
-                if el != '\n':
-                    book += el.rstrip()
-            print(book)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = f.read()
+            
+            pc.add_book(
+                book_text=data,
+                book_name=book_title,
+                author_name=book_author
+            )
 
 
             flash(f'Файл "{filename}" успешно загружен!', 'success')
