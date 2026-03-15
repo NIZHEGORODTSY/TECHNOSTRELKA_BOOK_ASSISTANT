@@ -7,6 +7,7 @@ from pinecone_controller import PineconeController
 from scripts import format_answer, get_context
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from string import ascii_letters
 
 load_dotenv('_.env')
 
@@ -49,20 +50,21 @@ def search_post():
     amount = int(request.form.get('amount'))
 
     print(amount)
-
-    start_time = time.time()
-    # TODO: временно None, потом доставать из формы
-    user_book = None
-    user_author = None
-    result = pc.search_similar_chunks(
-        question=user_question,
-        book_name=user_book,
-        author_name=user_author,
-        top_k=amount
-    )  # list[str] - найденные фрагменты
-    end_time = time.time()
-    delta = round(float(end_time - start_time), 1)
-    return render_template('search.html', chunks=result, time=f'{str(delta)} сек.')
+    if user_question and user_question[0] != ' ':
+        start_time = time.time()
+        # TODO: временно None, потом доставать из формы
+        user_book = None
+        user_author = None
+        result = pc.search_similar_chunks(
+            question=user_question,
+            book_name=user_book,
+            author_name=user_author,
+            top_k=amount
+        )  # list[str] - найденные фрагменты
+        end_time = time.time()
+        delta = round(float(end_time - start_time), 1)
+        return render_template('search.html', chunks=result, time=f'{str(delta)} сек.')
+    return render_template('search.html', chunks='1')
 
 
 @app.route('/library', methods=['GET'])
@@ -74,7 +76,7 @@ def show_lib():
         "К. Паустовский": ["Акварельные краски"]
     }
 
-    return render_template('library.html', data = _dict)
+    return render_template('library.html', data=_dict)
 
 
 @app.route('/upload', methods=['POST'])
