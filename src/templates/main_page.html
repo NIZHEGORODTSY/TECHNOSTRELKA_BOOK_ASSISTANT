@@ -25,7 +25,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/search" class="nav-link">
                         <i class="fas fa-search"></i>Поиск
                     </a>
                 </li>
@@ -38,18 +38,6 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-history"></i>История
                     </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>Настройки <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <div class="dropdown-content">
-                        <a href="#" class="dropdown-item">Профиль</a>
-                        <a href="#" class="dropdown-item">Предпочтения</a>
-                        <a href="#" class="dropdown-item">Уведомления</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">Выход</a>
-                    </div>
                 </li>
             </ul>
 
@@ -131,7 +119,7 @@
             window.location.href = "{{ url_for('search') }}";
         }
 
-    //Mobile menu toggle functionality
+    // Mobile menu toggle functionality
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
@@ -181,6 +169,7 @@
                 }
             });
         });
+
 
 </script>
 
