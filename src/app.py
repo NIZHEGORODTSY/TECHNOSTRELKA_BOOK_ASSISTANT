@@ -16,11 +16,6 @@ app = Flask(
     static_folder=str(STATIC_DIR),
 )
 
-# NOTE: варианты моделей:
-# t-bank-ai/ruDialoGPT-small - ответы в странной форме диалога + матерится !!!!
-
-# mistralai/Mistral-7B-v0.3 - ОЧЕНЬ медленно работает. на маленьких промптах выдаёт осмысленный текст (примерно 6 минут), на большом промпте ответ более-менее адекватный (26 минут)
-
 mc = ModelController(temperature=1.3, max_completion_tokens=150)
 
 

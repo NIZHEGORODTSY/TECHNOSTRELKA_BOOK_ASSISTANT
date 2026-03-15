@@ -14,7 +14,7 @@ load_dotenv('_.env')
 class ModelController:
     def __init__(self, temperature: float, max_completion_tokens: int = 150):
         self._client = OpenAI(
-            api_key=os.environ.get("DEEPSEEK_API_KEY"),
+            api_key=os.getenv("DEEPSEEK_API_KEY"),
             base_url="https://api.deepseek.com",
         )
         self._model = "deepseek-chat"
@@ -29,7 +29,7 @@ class ModelController:
             },
             {
                 "role": "system",
-                "content": f"""Прочитай текст и ответь на предложенный вопрос. Текст: {context}. В своём ответе не используй символы '*' и '#'!!!"""
+                "content": f"""Прочитай текст и ответь на предложенный вопрос. Текст: {context}"""
             },
             {
                 "role": "user",
