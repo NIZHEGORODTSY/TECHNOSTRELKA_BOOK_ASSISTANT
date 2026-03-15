@@ -1,10 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
+<main>
+    <section class="search-container">
+        <form method="POST" action="/question">
+            <div class="search-box">
+                <input name="user_text" type="text" class="search-input" id="searchInput"
+                       placeholder="Enter text to search...">
+                <button type="submit" class="btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </section>
 
-<div>
-    <h1>Вопросы к ИИ</h1>
+    <section class="results-container">
+        {% if answer and answer != '1' %}
+        {% for item in answer %}
+        <div class="results-header">
+            <div class="result-count">{{item | safe}}</div>
+        </div>
+        {% endfor %}
+        <div class="results-header time-display">
+            <div class="result-count">Затрачено времени: {{time}}</div>
+        </div>
+        {% elif answer == '1' %}
+        {% else %}
+        <div class="results-header no-results">
+            <div class="result-count">К сожалению, ничего не найдено</div>
+        </div>
+        {% endif %}
+    </section>
 
-</div>
+</main>
 
 {% endblock %}

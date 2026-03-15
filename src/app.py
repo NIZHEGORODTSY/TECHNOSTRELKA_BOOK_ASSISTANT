@@ -57,7 +57,7 @@ def show_lib():
 
 @app.route('/question', methods=['GET'])
 def question_show():
-    return render_template('question.html')
+    return render_template('question.html', answer='1')
 
 @app.route('/question', methods=['POST'])
 def question_post():

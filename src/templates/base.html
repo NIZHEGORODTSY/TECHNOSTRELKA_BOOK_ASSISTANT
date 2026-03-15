@@ -8,15 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/main-page.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/library.css') }}">
 
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>Поиск фрагментов в книгах</h1>
-        <p class="subtitle">Быстрый и точный поиск текстовых фрагментов в классической литературе</p>
         <div class="header-content">
-            <a href="/" class="logo">
+            <a href="#" class="logo">
                 <div class="logo-icon">
                     <i class="fas fa-book-open"></i>
                 </div>
@@ -41,17 +40,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/library" class="nav-link">
-                        <i class="fas fa-book"></i>Библиотека
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/question" class="nav-link">
                         <i class="fas fa-history"></i>Вопрос к ИИ
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/library" class="nav-link">
+                        <i class="fas fa-book"></i>Библиотека
+                    </a>
+                </li>
             </ul>
-
 
         </div>
     </header>
@@ -59,56 +57,86 @@
     <main role="main" class="main-content">
         {% block content %}{% endblock %}
     </main>
-    <script>// Mobile menu toggle functionality
-    const menuToggle = document.getElementById('menuToggle');
-    const navMenu = document.getElementById('navMenu');
+    <script>
+    // Mobile menu toggle functionality
+const menuToggle = document.getElementById('menuToggle');
+const navMenu = document.getElementById('navMenu');
 
+// Проверяем существование элементов перед добавлением обработчиков
+if (menuToggle && navMenu) {
     menuToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
+        navMenu.classList.toggle('active');
 
-            // Animate hamburger icon
+        // Animate hamburger icon
+        const bars = menuToggle.querySelectorAll('.menu-bar');
+        if (navMenu.classList.contains('active')) {
+            bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            bars[1].style.opacity = '0';
+            bars[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
+        } else {
+            bars[0].style.transform = 'none';
+            bars[1].style.opacity = '1';
+            bars[2].style.transform = 'none';
+        }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            navMenu.classList.remove('active');
+
+            // Reset hamburger icon
             const bars = menuToggle.querySelectorAll('.menu-bar');
-            if (navMenu.classList.contains('active')) {
-                bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                bars[1].style.opacity = '0';
-                bars[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
-            } else {
-                bars[0].style.transform = 'none';
-                bars[1].style.opacity = '1';
-                bars[2].style.transform = 'none';
-            }
-        });
+            bars[0].style.transform = 'none';
+            bars[1].style.opacity = '1';
+            bars[2].style.transform = 'none';
+        }
+    });
+}
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+// Active link indicator based on current page
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const currentPage = window.location.pathname;
+
+    navLinks.forEach(link => {
+        // Удаляем активный класс со всех ссылок
+        link.classList.remove('active');
+
+        // Получаем путь из href ссылки
+        const linkPath = new URL(link.href).pathname;
+
+        // Если путь ссылки совпадает с текущей страницей, добавляем активный класс
+        if (linkPath === currentPage) {
+            link.classList.add('active');
+        }
+
+        // Добавляем обработчик клика для переключения активного состояния
+        link.addEventListener('click', function() {
+            navLinks.forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+
+            // Close mobile menu after selection
+            if (navMenu && window.innerWidth <= 768) {
                 navMenu.classList.remove('active');
-
-                // Reset hamburger icon
-                const bars = menuToggle.querySelectorAll('.menu-bar');
-                bars[0].style.transform = 'none';
-                bars[1].style.opacity = '1';
-                bars[2].style.transform = 'none';
-            }
-        });
-
-        // Active link indicator
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                navLinks.forEach(item => item.classList.remove('active'));
-                this.classList.add('active');
-
-                // Close mobile menu after selection
-                if (window.innerWidth <= 768) {
-                    navMenu.classList.remove('active');
+                if (menuToggle) {
                     const bars = menuToggle.querySelectorAll('.menu-bar');
                     bars[0].style.transform = 'none';
                     bars[1].style.opacity = '1';
                     bars[2].style.transform = 'none';
                 }
-            });
+            }
         });
+    });
+});
+
+
+
+
+
+
+
+
 
     </script>
 
