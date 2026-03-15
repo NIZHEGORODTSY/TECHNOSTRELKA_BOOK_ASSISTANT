@@ -53,6 +53,7 @@ def search_post():
     if user_question and user_question[0] != ' ':
         start_time = time.time()
         # TODO: временно None, потом доставать из формы
+        # TODO: добавить поля для поиска по конкретному автору или произведению
         user_book = None
         user_author = None
         result = pc.search_similar_chunks(
