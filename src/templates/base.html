@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Fragment Search</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/search.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/main-page.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav-style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/library.css') }}">
+
 
 </head>
 <body>
 <div class="container">
     <header>
         <div class="header-content">
-            <a href="#" class="logo">
+            <a href="/" class="logo">
                 <div class="logo-icon">
                     <i class="fas fa-book-open"></i>
                 </div>
@@ -117,15 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
 
             // Close mobile menu after selection
-            if (navMenu && window.innerWidth <= 768) {
-                navMenu.classList.remove('active');
-                if (menuToggle) {
-                    const bars = menuToggle.querySelectorAll('.menu-bar');
-                    bars[0].style.transform = 'none';
-                    bars[1].style.opacity = '1';
-                    bars[2].style.transform = 'none';
-                }
-            }
+
         });
     });
 });
