@@ -21,7 +21,7 @@ class PineconeController:
             )
         self._index = self._pc.Index(self._index_name)
 
-    
+
     def _chunk_text(self, text:str, chunk_size:int=200, overlap:int=40) -> list:
         words = text.split()
         chunks = []

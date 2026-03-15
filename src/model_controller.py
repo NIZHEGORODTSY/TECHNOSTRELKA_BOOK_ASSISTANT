@@ -39,7 +39,7 @@ class ModelController:
         )
 
         return response.choices[0].message.content
-    
+
     def format_answer(self, answer: str) -> str:
         html = markdown.markdown(answer)
         return html

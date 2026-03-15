@@ -16,11 +16,9 @@
 
     <section class="results-container">
         {% if answer and answer != '1' %}
-        {% for item in answer %}
         <div class="results-header">
-            <div class="result-count">{{item | safe}}</div>
+            <div class="result-count">{{answer | safe}}</div>
         </div>
-        {% endfor %}
         <div class="results-header time-display">
             <div class="result-count">Затрачено времени: {{time}}</div>
         </div>

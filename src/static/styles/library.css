@@ -1,0 +1,234 @@
+/* Library Page Styles - Элементы растянуты по всей ширине */
+
+.library-section, .upload-section {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 100%;
+    margin: 0 auto 30px auto;
+}
+
+.section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    gap: 15px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin: 0;
+    text-align: center;
+}
+
+.search-box {
+    width: 100%;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.books-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
+.book-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover {
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+
+.book-info {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.book-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.book-author {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.book-meta {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: #95a5a6;
+}
+
+.upload-section {
+    text-align: center;
+    width: 100%;
+}
+
+.upload-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-group {
+    width: 100%;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.file-upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.file-upload-area:hover {
+    border-color: #3498db;
+    background: rgba(52, 152, 219, 0.03);
+}
+
+.file-upload-icon {
+    font-size: 3rem;
+    color: #bdc3c7;
+    margin-bottom: 15px;
+}
+
+.file-upload-text {
+    color: #7f8c8d;
+    margin-bottom: 15px;
+}
+
+.file-upload-text strong {
+    color: #3498db;
+}
+
+.file-name {
+    font-size: 0.9rem;
+    color: #95a5a6;
+    margin-top: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .library-section, .upload-section {
+        padding: 20px;
+    }
+
+    .book-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .book-cover {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .book-meta {
+        justify-content: center;
+    }
+
+    .section-header {
+        gap: 10px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .upload-form {
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .library-section, .upload-section {
+        padding: 15px;
+    }
+
+    .book-card {
+        padding: 10px;
+    }
+
+    .book-cover {
+        width: 60px;
+        height: 90px;
+        font-size: 1.5rem;
+    }
+
+    .book-title {
+        font-size: 1.1rem;
+    }
+}
