@@ -7,6 +7,9 @@
             <div class="search-box">
                 <input name="user_text" type="text" class="search-input" id="searchInput"
                        placeholder="Enter text to search...">
+                <input type="number" min="1" max="10" value="5" step="1" style="max-width: 12%" name="amount"
+                       class="search-input">
+                placeholder="Enter amount of answers">
                 <button type="submit" class="btn" id="searchBtn">
                     <i class="fas fa-search"></i> Search
                 </button>
@@ -23,6 +26,13 @@
             <div class="result-count">Затрачено времени: {{time}}</div>
         </div>
         {% elif answer == '1' %}
+        <div class="results-header">
+            <div class="result-count">
+                <ul style="padding-left: 5%; padding-right: 5%; padding-top: 0%; padding-bottom: 0%;">
+                    <li>Здесь вы увидите результаты поиска</li>
+                </ul>
+            </div>
+        </div>
         {% else %}
         <div class="results-header no-results">
             <div class="result-count">К сожалению, ничего не найдено</div>
