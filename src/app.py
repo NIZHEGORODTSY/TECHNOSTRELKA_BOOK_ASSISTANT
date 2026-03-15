@@ -21,7 +21,7 @@ mc = ModelController(temperature=1.3, max_completion_tokens=150)
 
 @app.route('/')
 def main():
-    return 'hello!'
+    return render_template('main_page.html')
 
 
 @app.route('/search', methods=['GET', 'POST'])
