@@ -23,6 +23,13 @@
             <div class="result-count">Затрачено времени: {{time}}</div>
         </div>
         {% elif answer == '1' %}
+        <div class="results-header">
+            <div class="result-count">
+                <ul style="padding-left: 5%; padding-right: 5%; padding-top: 0%; padding-bottom: 0%;">
+                    <li>Здесь вы увидите результаты поиска</li>
+                </ul>
+            </div>
+        </div>
         {% else %}
         <div class="results-header no-results">
             <div class="result-count">К сожалению, ничего не найдено</div>

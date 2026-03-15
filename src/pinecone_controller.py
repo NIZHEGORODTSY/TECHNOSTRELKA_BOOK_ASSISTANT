@@ -2,6 +2,10 @@ from pinecone import Pinecone, ServerlessSpec
 import os
 from sentence_transformers import SentenceTransformer
 import uuid
+from dotenv import load_dotenv
+
+load_dotenv('_.env')
+
 
 class PineconeController:
     def __init__(self):
@@ -21,8 +25,7 @@ class PineconeController:
             )
         self._index = self._pc.Index(self._index_name)
 
-
-    def _chunk_text(self, text:str, chunk_size:int=200, overlap:int=40) -> list:
+    def _chunk_text(self, text: str, chunk_size: int = 200, overlap: int = 40) -> list:
         words = text.split()
         chunks = []
 
@@ -34,18 +37,17 @@ class PineconeController:
 
         return chunks
 
-    def _get_embedding(self, text:str):
+    def _get_embedding(self, text: str):
         embedding = self._embedding_model.encode(text)
         return embedding.tolist()
 
-    def add_book(self, book_text:str, book_name:str, author_name:str):
+    def add_book(self, book_text: str, book_name: str, author_name: str):
 
         chunks = self._chunk_text(book_text)
 
         vectors = []
 
         for chunk in chunks:
-
             embedding = self._get_embedding(chunk)
 
             vectors.append({
@@ -60,7 +62,8 @@ class PineconeController:
 
         self._index.upsert(vectors)
 
-    def search_similar_chunks(self, question: str, top_k:int=3, book_name:str=None, author_name:str=None) -> list[dict[str, str]]:
+    def search_similar_chunks(self, question: str, top_k: int = 3, book_name: str = None, author_name: str = None) -> \
+            list[dict[str, str]]:
         """
         Ищет топ-K наиболее похожих chunk'ов на вопрос.
         Можно ограничить поиск конкретной книгой или автором.
@@ -120,17 +123,5 @@ class PineconeController:
                 book_title = data["metadata"].get("book")
                 if book_title not in result[book_author]:
                     result[book_author].append(book_title)
-
-
-        # Извлекаем уникальные книги
-        # books = set()
-        # for vid, data in vectors["vectors"].items():
-        #     book_name = data["metadata"].get("book")
-        #     if book_name:
-        #         books.add(book_name)
-
-        # print("Книги, загруженные в базу:")
-        # for book in books:
-        #     print("-", book)
 
         return result

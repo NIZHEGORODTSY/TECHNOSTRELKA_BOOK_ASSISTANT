@@ -10,61 +10,20 @@
     </div>
 
     <div class="books-grid">
+        {% for key, value in data.items() %}
+        <h1>{{key}}</h1>
+        {% for book in value %}
         <div class="book-card">
             <div class="book-cover">
                 <i class="fas fa-book"></i>
             </div>
             <div class="book-info">
-                <h3 class="book-title">Преступление и наказание</h3>
-                <p class="book-author">Фёдор Достоевский</p>
-                <div class="book-meta">
-                    <span>1866 г.</span>
-                    <span>671 стр.</span>
-                </div>
+                <h3 class="book-title">{{book}}</h3>
+                <p class="book-author">{{key}}</p>
             </div>
         </div>
-
-        <div class="book-card">
-            <div class="book-cover" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
-                <i class="fas fa-book"></i>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">Война и мир</h3>
-                <p class="book-author">Лев Толстой</p>
-                <div class="book-meta">
-                    <span>1869 г.</span>
-                    <span>1225 стр.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-cover" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
-                <i class="fas fa-book"></i>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">Мастер и Маргарита</h3>
-                <p class="book-author">Михаил Булгаков</p>
-                <div class="book-meta">
-                    <span>1967 г.</span>
-                    <span>445 стр.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-cover" style="background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);">
-                <i class="fas fa-book"></i>
-            </div>
-            <div class="book-info">
-                <h3 class="book-title">Евгений Онегин</h3>
-                <p class="book-author">Александр Пушкин</p>
-                <div class="book-meta">
-                    <span>1833 г.</span>
-                    <span>224 стр.</span>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
+        {% endfor %}
     </div>
 </section>
 
@@ -187,6 +146,7 @@
         // Если все данные корректны, форма отправится стандартным способом
         // Показываем сообщение пользователю
     });
+
 
 </script>
 

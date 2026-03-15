@@ -40,75 +40,82 @@ def main():
 
 @app.route('/search', methods=['GET'])
 def search_show():
-    return render_template('search.html', answer='1')
+    return render_template('search.html', chunks='1')
 
 
 @app.route('/search', methods=['POST'])
 def search_post():
     user_question = request.form.get('user_question')
+    amount = int(request.form.get('amount'))
+
+    print(amount)
+
+    start_time = time.time()
     # TODO: временно None, потом доставать из формы
     user_book = None
     user_author = None
     result = pc.search_similar_chunks(
         question=user_question,
         book_name=user_book,
-        author_name=user_author
-    ) # list[str] - найденные фрагменты
-    return render_template('search.html', chunks=result)
+        author_name=user_author,
+        top_k=amount
+    )  # list[str] - найденные фрагменты
+    end_time = time.time()
+    delta = round(float(end_time - start_time), 1)
+    return render_template('search.html', chunks=result, time=f'{str(delta)} сек.')
+
 
 @app.route('/library', methods=['GET'])
 def show_lib():
-    return render_template('library.html')
+    _dict = pc.list_all_books()
+    # _dict = {
+    #     "Л.Н.Толстой": ["Война и мир Том 1", "Война и мир Том 2", "Война и мир Том 3"],
+    #     "О.Генри": ["Дары волхвов"],
+    #     "К. Паустовский": ["Акварельные краски"]
+    # }
+
+    return render_template('library.html', data = _dict)
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
-        # Получаем данные из формы
         book_title = request.form.get('bookTitle')
         book_author = request.form.get('bookAuthor')
 
         print(f"Название книги: {book_title}")
         print(f"Автор: {book_author}")
 
-        # Проверяем наличие файла
         if 'file' not in request.files:
             flash('Ошибка: нет файла в запросе', 'error')
             return redirect(url_for('show_lib'))
 
         file = request.files['file']
 
-        # Проверяем, выбран ли файл
         if file.filename == '':
             flash('Ошибка: файл не выбран', 'error')
             return redirect(url_for('show_lib'))
 
-        # Проверяем расширение файла
         if not file.filename.endswith('.txt'):
             flash('Ошибка: поддерживаются только .txt файлы', 'error')
             print('ошибка формата')
             return redirect(url_for('show_lib'))
 
-        # Проверяем название и автора
         if not book_title or not book_author:
             flash('Ошибка: необходимо указать название книги и автора', 'error')
             return redirect(url_for('show_lib'))
 
-        # Сохраняем файл
         if file and file.filename:
-            # Используем secure_filename для безопасности
             filename = secure_filename(file.filename)
 
-            # Добавляем временную метку к имени файла
             from datetime import datetime
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             name_part = os.path.splitext(filename)[0]
             ext = os.path.splitext(filename)[1]
             new_filename = f"{timestamp}_{name_part}{ext}"
 
-            # Создаем путь для сохранения
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
 
-            # Сохраняем файл
             file.save(file_path)
 
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -119,7 +126,6 @@ def upload_file():
                 book_name=book_title,
                 author_name=book_author
             )
-
 
             flash(f'Файл "{filename}" успешно загружен!', 'success')
             flash(f'Название: {book_title}, Автор: {book_author}', 'info')
@@ -145,7 +151,7 @@ def question_post():
     user_text = request.form['user_text']
     start_time = time.time()
     answer = mc.generate(
-        context=get_context(), # get_context временно, потом будет mc.search_similar_chunks 
+        context=get_context(),  # get_context временно, потом будет mc.search_similar_chunks
         question=user_text,
     )
     end_time = time.time()
