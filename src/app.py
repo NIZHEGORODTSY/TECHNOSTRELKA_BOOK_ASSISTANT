@@ -7,6 +7,7 @@ from pinecone_controller import PineconeController
 from scripts import format_answer, get_context
 from dotenv import load_dotenv
 
+load_dotenv('_.env')
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -32,17 +33,6 @@ def main():
 @app.route('/search', methods=['GET'])
 def search_show():
     return render_template('search.html')
-    # if request.method == 'POST':
-    #     user_text = request.form['user_text']
-    #     start_time = time.time()
-    #     answer = mc.generate(
-    #         context=get_context(),
-    #         question=user_text,
-    #     )
-    #     end_time = time.time()
-    #     delta = round(float(end_time - start_time), 1)
-    #     return render_template('search.html', answer=format_answer(answer), time=f'{str(delta)} сек.')
-    # return render_template('search.html', answer='1')
 
 @app.route('/search', methods=['POST'])
 def search_post():
@@ -69,7 +59,7 @@ def question_post():
     )
     end_time = time.time()
     delta = round(float(end_time - start_time), 1)
-    return render_template('question.html', answer=format_answer(answer), time=f'{str(delta)} сек.')
+    return render_template('question.html', answer=mc.format_answer(answer), time=f'{str(delta)} сек.')
 
 
 app.run('0.0.0.0', port=5000, debug=True)
