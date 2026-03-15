@@ -1,14 +1,6 @@
 from openai import OpenAI
 import os
-from dotenv import load_dotenv
-
-# NOTE:
-# В ходе продолжительных экспериментов было принято решение отказаться от локального использования моделей hugging face из-за ОЧЕНЬ низкой скорости работы
-# Решено использовать api deepseek
-
-# P.S. в ходе работы столкнулся с тем, что модель в своих ответах испоьзует символы '#' и '*' для выделения слов. пока что не придумал, как реализовать выделение таких слов при отображении на сайте
-
-load_dotenv('_.env')
+import markdown
 
 
 class ModelController:
@@ -46,3 +38,7 @@ class ModelController:
         )
 
         return response.choices[0].message.content
+    
+    def format_answer(self, answer: str) -> str:
+        html = markdown.markdown(answer)
+        return html
