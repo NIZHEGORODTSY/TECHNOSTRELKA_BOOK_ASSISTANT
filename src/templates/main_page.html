@@ -4,6 +4,57 @@
     <header>
         <h1>Поиск фрагментов в книгах</h1>
         <p class="subtitle">Быстрый и точный поиск текстовых фрагментов в классической литературе</p>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="logo-text">BookSearch</div>
+            </a>
+
+            <div class="menu-toggle" id="menuToggle">
+                <span class="menu-bar"></span>
+                <span class="menu-bar"></span>
+                <span class="menu-bar"></span>
+            </div>
+
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-home"></i>Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-search"></i>Поиск
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-book"></i>Библиотека
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-history"></i>История
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>Настройки <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="#" class="dropdown-item">Профиль</a>
+                        <a href="#" class="dropdown-item">Предпочтения</a>
+                        <a href="#" class="dropdown-item">Уведомления</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">Выход</a>
+                    </div>
+                </li>
+            </ul>
+
+
+        </div>
     </header>
 
     <main>
@@ -45,22 +96,22 @@
 
         <section class="stats">
             <div class="stat-card">
-                <div class="stat-number">10,000+</div>
+                <div class="stat-number">data</div>
                 <div class="stat-label">Книг в базе</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-number">5M+</div>
+                <div class="stat-number">data</div>
                 <div class="stat-label">Поисковых запросов</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-number">99.9%</div>
+                <div class="stat-number">data</div>
                 <div class="stat-label">Точность поиска</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-number">0.3s</div>
+                <div class="stat-number">data</div>
                 <div class="stat-label">Среднее время ответа</div>
             </div>
         </section>
@@ -79,6 +130,62 @@
     function redirectToPage() {
             window.location.href = "{{ url_for('search') }}";
         }
+
+    <script>
+        // Mobile menu toggle functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+
+            // Animate hamburger icon
+            const bars = menuToggle.querySelectorAll('.menu-bar');
+            if (navMenu.classList.contains('active')) {
+                bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                bars[1].style.opacity = '0';
+                bars[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
+            } else {
+                bars[0].style.transform = 'none';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = 'none';
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+
+                // Reset hamburger icon
+                const bars = menuToggle.querySelectorAll('.menu-bar');
+                bars[0].style.transform = 'none';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = 'none';
+            }
+        });
+
+        // Active link indicator
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close mobile menu after selection
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    const bars = menuToggle.querySelectorAll('.menu-bar');
+                    bars[0].style.transform = 'none';
+                    bars[1].style.opacity = '1';
+                    bars[2].style.transform = 'none';
+                }
+            });
+        });
+
+
+</script>
+
 </script>
 
 
