@@ -39,6 +39,16 @@ def search():
     return render_template('search.html', answer='1')
 
 
+@app.route('/library')
+def show_lib():
+    return render_template('library.html')
+
+
+@app.route('/question')
+def question():
+    return render_template('question.html')
+
+
 # NOTE: тестовая функция для проверки работы модели
 # @app.route('/test_model')
 # def test_model():
