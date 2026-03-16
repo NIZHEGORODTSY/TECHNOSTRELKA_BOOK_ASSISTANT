@@ -144,21 +144,26 @@ def upload_file():
 
 @app.route('/question', methods=['GET'])
 def question_show():
-    return render_template('question.html', answer='1')
+    library = pc.list_all_books()
+    books_and_authors = format_library(library)
+    return render_template('question.html', answer='1', books_and_authors=books_and_authors)
 
 
 @app.route('/question', methods=['POST'])
 def question_post():
     user_text = request.form['user_text']
+    book_choice = request.form.get('books').split(' - ')
+    author, book = book_choice[0], book_choice[-1]
+    library = pc.list_all_books()
+    books_and_authors = format_library(library)
     start_time = time.time()
-    prompt = mc.form_prompt_from_chunks_and_question(
-        chunks=pc.search_similar_chunks(question=user_text),
-        question=user_text
-    )
+    chunks = pc.search_similar_chunks(question=user_text, author_name=author, book_name=book, top_k = 10)
+    prompt = mc.form_prompt_from_chunks_and_question(chunks=chunks, question=user_text)
     answer = mc.generate(prompt)
     end_time = time.time()
     delta = round(float(end_time - start_time), 1)
-    return render_template('question.html', answer=mc.format_answer(answer), time=f'{str(delta)} сек.')
+    return render_template('question.html', answer=mc.format_answer(answer), time=f'{str(delta)} сек.',
+                           books_and_authors=books_and_authors)
 
 
 if __name__ == '__main__':

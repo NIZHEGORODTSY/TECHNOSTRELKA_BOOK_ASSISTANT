@@ -28,12 +28,12 @@ class ModelController:
     def format_answer(self, answer: str) -> str:
         html = markdown.markdown(answer)
         return html
-    
-    def form_prompt_from_chunks_and_question(chunks: list[Chunk], question: str) -> list[dict[str, str]]:
+
+    def form_prompt_from_chunks_and_question(self, chunks: list[Chunk], question: str) -> list[dict[str, str]]:
         fragments = ""
         for i in range(len(chunks)):
-            fragment = "\\{" + str(i + 1) + "\\} "
-            fragment += f"Автор: {chunks[i].author} Название: \"{chunks[i].book}\" {chunks[i].text}    "
+            # fragment = "\\{" + str(i + 1) + "\\} "
+            fragment = f"Автор: {chunks[i].author} Название: \"{chunks[i].book}\" {chunks[i].text}    "
             fragments += fragment
 
         prompt = [
@@ -55,4 +55,4 @@ class ModelController:
             }
         ]
 
-        return prompt 
+        return prompt
