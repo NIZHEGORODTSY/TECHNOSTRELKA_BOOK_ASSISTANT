@@ -42,13 +42,15 @@ def main():
 
 @app.route('/search', methods=['GET'])
 def search_show():
-    return render_template('search.html', chunks='1')
+    books_and_authors = [['author', 'book'], ['author2', 'book2']]
+    return render_template('search.html', chunks='1', books_and_authors=books_and_authors)
 
 
 @app.route('/search', methods=['POST'])
 def search_post():
     user_question = request.form.get('user_question')
     amount = int(request.form.get('amount'))
+    books_and_authors = [['author', 'book'], ['author2', 'book2']]
 
     print(amount)
     if user_question and user_question[0] != ' ':
@@ -65,8 +67,9 @@ def search_post():
         )  # list[str] - найденные фрагменты
         end_time = time.time()
         delta = round(float(end_time - start_time), 1)
-        return render_template('search.html', chunks=result, time=f'{str(delta)} сек.')
-    return render_template('search.html', chunks='1')
+        return render_template('search.html', chunks=result, time=f'{str(delta)} сек.',
+                               books_and_authors=books_and_authors)
+    return render_template('search.html', chunks='1', books_and_authors=books_and_authors)
 
 
 @app.route('/library', methods=['GET'])
