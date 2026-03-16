@@ -319,3 +319,34 @@
 .results-header.time-display::before {
     background: linear-gradient(to bottom, #27ae60, #229954);
 }
+
+    /* Добавим стили для лучшего внешнего вида */
+    .dropdown-container {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .dropdown-container select {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .dropdown-container select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    /* Адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+        .dropdown-container {
+            flex-direction: column;
+        }
+    }

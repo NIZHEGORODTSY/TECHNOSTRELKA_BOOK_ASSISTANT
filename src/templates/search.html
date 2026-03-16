@@ -7,12 +7,31 @@
             <div class="search-box">
                 <input name="user_question" type="text" class="search-input" id="searchInput"
                        placeholder="Enter text to search...">
-                <input type="number" min="1" max="10" value="5" step="1" style="max-width: 12%" name="amount"
+                <input type="number" min="1" max="5" value="2" step="1" style="max-width: 12%" name="amount"
                        class="search-input">
                 <button type="submit" class="btn" id="searchBtn">
                     <i class="fas fa-search"></i> Search
                 </button>
             </div>
+
+            <div class="dropdown-container" style="display: flex; gap: 15px; margin-top: 20px;">
+                <select id="tom-select-example" name="books" class="search-input"
+                        style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                    <option value="">Выберите книгу и автора</option>
+                    {% for item in books_and_authors%}
+                    <option>{{"{} - {}".format(item[0], item[1])}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <script>
+        new TomSelect("#tom-select-example", {
+            maxItems: 1,
+            plugins: ['remove_button']
+        });
+
+
+            </script>
         </form>
     </section>
 
@@ -26,7 +45,6 @@
                     <li>Автор: {{ chunk.author }}</li>
                     <li>{{ chunk.text }}</li>
                 </ul>
-                {{item | safe}}
             </div>
         </div>
         {% endfor %}
@@ -49,5 +67,6 @@
     </section>
 
 </main>
+
 
 {% endblock %}

@@ -4,10 +4,9 @@ import time
 from pathlib import Path
 from model_controller import ModelController
 from pinecone_controller import PineconeController
-from scripts import format_answer, get_context
+from scripts import format_library, get_context
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
-from string import ascii_letters
 
 load_dotenv('_.env')
 
@@ -42,31 +41,35 @@ def main():
 
 @app.route('/search', methods=['GET'])
 def search_show():
-    return render_template('search.html', chunks='1')
+    library = pc.list_all_books()
+    books_and_authors = format_library(library)
+    return render_template('search.html', chunks='1', books_and_authors=books_and_authors)
 
 
 @app.route('/search', methods=['POST'])
 def search_post():
     user_question = request.form.get('user_question')
     amount = int(request.form.get('amount'))
+    book_choice = request.form.get('books').split(' - ')
+    author, book = book_choice[0], book_choice[-1]
+    library = pc.list_all_books()
+    books_and_authors = format_library(library)
 
-    print(amount)
     if user_question and user_question[0] != ' ':
         start_time = time.time()
         # TODO: временно None, потом доставать из формы
         # TODO: добавить поля для поиска по конкретному автору или произведению
-        user_book = None
-        user_author = None
         result = pc.search_similar_chunks(
             question=user_question,
-            book_name=user_book,
-            author_name=user_author,
+            book_name=book,
+            author_name=author,
             top_k=amount
         )
         end_time = time.time()
         delta = round(float(end_time - start_time), 1)
-        return render_template('search.html', chunks=result, time=f'{str(delta)} сек.')
-    return render_template('search.html', chunks='1')
+        return render_template('search.html', chunks=result, time=f'{str(delta)} сек.',
+                               books_and_authors=books_and_authors)
+    return render_template('search.html', chunks='1', books_and_authors=books_and_authors)
 
 
 @app.route('/library', methods=['GET'])
