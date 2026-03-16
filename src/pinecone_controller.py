@@ -113,7 +113,7 @@ class PineconeController:
         # Получаем данные по ID
         vectors = self._index.fetch(ids=all_ids)
 
-        result: dict[str, list[str]] = {} # {"Автор": ["Названия", "книг"]}
+        result: dict[str, list[str]] = {}  # {"Автор": ["Названия", "книг"]}
 
         for vid, data in vectors["vectors"].items():
             book_author = data["metadata"].get("author")
@@ -125,3 +125,20 @@ class PineconeController:
                     result[book_author].append(book_title)
 
         return result
+
+    def get_amount_of_books(self) -> int:
+        all_ids = []
+        for batch in self._index.list():
+            all_ids.extend(batch)
+
+        vectors = self._index.fetch(ids=all_ids)
+
+        # Извлекаем уникальные книги
+        books = set()
+        for vid, data in vectors["vectors"].items():
+            book_name = data["metadata"].get("book")
+            if book_name:
+                books.add(book_name)
+        return len(books)
+
+# TODO: нужно добавить статистические функции для общего числа запросов, среднего времени ответа и, по возможности, точности ответа
