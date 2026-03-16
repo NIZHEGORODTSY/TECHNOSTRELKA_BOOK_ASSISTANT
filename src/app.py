@@ -62,7 +62,7 @@ def search_post():
             book_name=user_book,
             author_name=user_author,
             top_k=amount
-        )  # list[str] - найденные фрагменты
+        )
         end_time = time.time()
         delta = round(float(end_time - start_time), 1)
         return render_template('search.html', chunks=result, time=f'{str(delta)} сек.')
@@ -72,11 +72,6 @@ def search_post():
 @app.route('/library', methods=['GET'])
 def show_lib():
     _dict = pc.list_all_books()
-    # _dict = {
-    #     "Л.Н.Толстой": ["Война и мир Том 1", "Война и мир Том 2", "Война и мир Том 3"],
-    #     "О.Генри": ["Дары волхвов"],
-    #     "К. Паустовский": ["Акварельные краски"]
-    # }
 
     return render_template('library.html', data=_dict)
 

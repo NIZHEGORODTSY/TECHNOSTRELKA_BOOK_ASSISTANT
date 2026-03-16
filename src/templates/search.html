@@ -22,9 +22,9 @@
         <div class="results-header">
             <div class="result-count">
                 <ul style="padding-left: 5%; padding-right: 5%; padding-top: 0%; padding-bottom: 0%;">
-                    <li>{{ chunk["book"] }}</li>
-                    <li>Автор: {{ chunk["author"] }}</li>
-                    <li>{{ chunk["text"] }}</li>
+                    <li>{{ chunk.book }}</li>
+                    <li>Автор: {{ chunk.author }}</li>
+                    <li>{{ chunk.text }}</li>
                 </ul>
                 {{item | safe}}
             </div>

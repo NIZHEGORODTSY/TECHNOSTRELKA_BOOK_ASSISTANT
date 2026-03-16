@@ -1,6 +1,7 @@
 from openai import OpenAI
 import os
 import markdown
+from objects import *
 
 
 class ModelController:
@@ -14,25 +15,10 @@ class ModelController:
         self._max_completion_tokens = max_completion_tokens
 
     # TODO: изменить промпт под формат чанков: Автор, Название книги, Текст фрагмента
-    def generate(self, context: str, question: str):
-        messages = [
-            {
-                "role": "system",
-                "content": "Ты помощник по вопросам содержания книг"
-            },
-            {
-                "role": "system",
-                "content": f"""Прочитай текст и ответь на предложенный вопрос. Текст: {context}. Отвечай на вопрос сразу, не пиши 'конечно!'."""
-            },
-            {
-                "role": "user",
-                "content": question
-            }
-        ]
-
+    def generate(self, context: str, prompt):
         response = self._client.chat.completions.create(
             model=self._model,
-            messages=messages,
+            messages=prompt,
             temperature=self._temperature,
             max_completion_tokens=self._max_completion_tokens,
             stream=False
@@ -43,3 +29,31 @@ class ModelController:
     def format_answer(self, answer: str) -> str:
         html = markdown.markdown(answer)
         return html
+    
+    def form_prompt_from_chunks_and_question(chunks: list[Chunk], question: str) -> list[dict[str, str]]:
+        fragments = ""
+        for i in range(len(chunks)):
+            fragment = "\{" + str(i + 1) + "\} "
+            fragment += f"Автор: {chunks[i].author} Название: \"{chunks[i].book}\" {chunks[i].text}    "
+            fragments += fragment
+
+        prompt = [
+            {
+                "role": "system",
+                "content": "Ты помощник по вопросам содержания книг"
+            },
+            {
+                "role": "system",
+                "content": f"""Тебе предложено несколько фрагментов разных книг: {fragments}"""
+            },
+            {
+                "role": "system",
+                "content": "Ответь на предложенный вопрос; отвечай на него сразу, не пиши 'конечно!'"
+            },
+            {
+                "role": "user",
+                "content": question
+            }
+        ]
+
+        return prompt 
