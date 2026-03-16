@@ -15,7 +15,7 @@
             </div>
 
             <div class="dropdown-container" style="display: flex; gap: 15px; margin-top: 20px;">
-                <select name="category" class="search-input"
+                <select id="tom-select-example" name="books" class="search-input"
                         style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                     <option value="">Выберите книгу и автора</option>
                     {% for item in books_and_authors%}
@@ -23,6 +23,15 @@
                     {% endfor %}
                 </select>
             </div>
+
+            <script>
+        new TomSelect("#tom-select-example", {
+            maxItems: 1,
+            plugins: ['remove_button']
+        });
+
+
+            </script>
         </form>
     </section>
 
