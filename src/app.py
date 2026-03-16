@@ -36,7 +36,8 @@ pc = PineconeController()
 
 @app.route('/')
 def main():
-    return render_template('main_page.html')
+    amount = pc.get_amount_of_books()
+    return render_template('main_page.html', amount=amount)
 
 
 @app.route('/search', methods=['GET'])
@@ -121,9 +122,9 @@ def upload_file():
 
             file.save(file_path)
 
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r') as f:
                 data = f.read()
-            
+
             pc.add_book(
                 book_text=data,
                 book_name=book_title,
