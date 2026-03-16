@@ -3,3 +3,4 @@ class Chunk:
         self.author = author
         self.book = book
         self.text = text
+

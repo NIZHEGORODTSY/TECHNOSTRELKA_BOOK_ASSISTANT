@@ -14,8 +14,7 @@ class ModelController:
         self._temperature = temperature
         self._max_completion_tokens = max_completion_tokens
 
-    # TODO: изменить промпт под формат чанков: Автор, Название книги, Текст фрагмента
-    def generate(self, context: str, prompt):
+    def generate(self, prompt):
         response = self._client.chat.completions.create(
             model=self._model,
             messages=prompt,
@@ -33,7 +32,7 @@ class ModelController:
     def form_prompt_from_chunks_and_question(chunks: list[Chunk], question: str) -> list[dict[str, str]]:
         fragments = ""
         for i in range(len(chunks)):
-            fragment = "\{" + str(i + 1) + "\} "
+            fragment = "\\{" + str(i + 1) + "\\} "
             fragment += f"Автор: {chunks[i].author} Название: \"{chunks[i].book}\" {chunks[i].text}    "
             fragments += fragment
 

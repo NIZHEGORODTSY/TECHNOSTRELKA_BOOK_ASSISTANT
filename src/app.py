@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from model_controller import ModelController
 from pinecone_controller import PineconeController
-from scripts import format_library, get_context
+from scripts import format_library, get_books_amount
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 
@@ -35,7 +35,8 @@ pc = PineconeController()
 
 @app.route('/')
 def main():
-    amount = pc.get_amount_of_books()
+    library = pc.list_all_books()
+    amount = get_books_amount(library)
     return render_template('main_page.html', amount=amount)
 
 
@@ -57,8 +58,6 @@ def search_post():
 
     if user_question and user_question[0] != ' ':
         start_time = time.time()
-        # TODO: временно None, потом доставать из формы
-        # TODO: добавить поля для поиска по конкретному автору или произведению
         result = pc.search_similar_chunks(
             question=user_question,
             book_name=book,
@@ -152,10 +151,11 @@ def question_show():
 def question_post():
     user_text = request.form['user_text']
     start_time = time.time()
-    answer = mc.generate(
-        context=get_context(),  # get_context временно, потом будет mc.search_similar_chunks
-        question=user_text,
+    prompt = mc.form_prompt_from_chunks_and_question(
+        chunks=pc.search_similar_chunks(question=user_text),
+        question=user_text
     )
+    answer = mc.generate(prompt)
     end_time = time.time()
     delta = round(float(end_time - start_time), 1)
     return render_template('question.html', answer=mc.format_answer(answer), time=f'{str(delta)} сек.')

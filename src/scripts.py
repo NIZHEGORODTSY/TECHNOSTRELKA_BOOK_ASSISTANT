@@ -5,6 +5,12 @@ def format_library(library: dict[str, list[str]]) -> list[list[str, str]]:
             formatted_library.append([author, book])
     return formatted_library
 
+def get_books_amount(library: dict[str, list[str]]) -> int:
+    amount = 0
+    for author in library.keys():
+        amount += len(library[author])
+    return amount
+
 
 # тут будем реализовывать получение контекста для модели
 def get_context():
