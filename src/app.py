@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from model_controller import ModelController
 from pinecone_controller import PineconeController
-from scripts import format_library, get_books_amount
+from scripts import format_library, get_books_amount, read_requests_count, increase_requests_count
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 
@@ -20,6 +20,8 @@ app = Flask(
     template_folder=str(TEMPLATES_DIR),
     static_folder=str(STATIC_DIR),
 )
+
+requests_count = read_requests_count()
 
 # Настройки загрузки файлов
 app.config['UPLOAD_FOLDER'] = 'uploads'  # папка для сохранения файлов
@@ -37,7 +39,7 @@ pc = PineconeController()
 def main():
     library = pc.list_all_books()
     amount = get_books_amount(library)
-    return render_template('main_page.html', amount=amount)
+    return render_template('main_page.html', amount=amount, requests_count=requests_count)
 
 
 @app.route('/search', methods=['GET'])
@@ -49,6 +51,7 @@ def search_show():
 
 @app.route('/search', methods=['POST'])
 def search_post():
+    global requests_count
     user_question = request.form.get('user_question')
     amount = int(request.form.get('amount'))
     book_choice = request.form.get('books').split(' - ')
@@ -66,6 +69,7 @@ def search_post():
         )
         end_time = time.time()
         delta = round(float(end_time - start_time), 1)
+        requests_count = increase_requests_count(requests_count)
         return render_template('search.html', chunks=result, time=f'{str(delta)} сек.',
                                books_and_authors=books_and_authors)
     return render_template('search.html', chunks='1', books_and_authors=books_and_authors)
