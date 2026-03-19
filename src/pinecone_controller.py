@@ -7,7 +7,6 @@ from objects import *
 
 load_dotenv('_.env')
 
-
 class PineconeController:
     def __init__(self):
         self._pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
