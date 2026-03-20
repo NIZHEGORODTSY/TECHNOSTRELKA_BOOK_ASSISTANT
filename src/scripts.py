@@ -1,3 +1,7 @@
+import os
+
+ADDITIONAL_DATA_FILE = 'addition_data.txt'
+
 def format_library(library: dict[str, list[str]]) -> list[list[str, str]]:
     formatted_library = []
     for author in library.keys():
@@ -12,14 +16,15 @@ def get_books_amount(library: dict[str, list[str]]) -> int:
     return amount
 
 def read_requests_count() -> int:
-    with open('addition_data.txt', 'a+') as f:
-        cnt = f.read()
-        if cnt == '':
-            f.write('0')
-            return 0
-        return int(cnt)
+    if os.path.exists(ADDITIONAL_DATA_FILE):
+        with open(ADDITIONAL_DATA_FILE, 'r') as f:
+            cnt = f.read()
+            return int(cnt)
+    with open(ADDITIONAL_DATA_FILE, 'w') as f:
+        f.write('0')
+        return 0
 
 def increase_requests_count(cur_cnt: int) -> int:
-    with open('addition_data.txt', 'w+') as f:
+    with open(ADDITIONAL_DATA_FILE, 'w') as f:
         f.write(str(cur_cnt + 1))
         return cur_cnt + 1
