@@ -8,7 +8,7 @@
                 <input name="user_text" type="text" class="search-input" id="searchInput"
                        placeholder="Введите ваш запрос...">
                 <button type="submit" class="btn" id="searchBtn">
-                    <i class="fas fa-search"></i> Search
+                    <i class="fas fa-search"></i> Задать вопрос
                 </button>
             </div>
             <div class="dropdown-container" style="display: flex; gap: 15px; margin-top: 20px;">
@@ -20,12 +20,12 @@
                     {% endfor %}
                 </select>
             </div>
-
             <script>
         new TomSelect("#tom-select-example", {
             maxItems: 1,
             plugins: ['remove_button']
         });
+
 
             </script>
         </form>
@@ -33,7 +33,7 @@
 
     <section class="results-container">
         {% if answer and answer != '1' %}
-        <div class="results-header">
+        <div class="results-header" style="padding: 5%;">
             <div class="result-count">{{answer | safe}}</div>
         </div>
         <div class="results-header time-display">
@@ -43,7 +43,7 @@
         <div class="results-header">
             <div class="result-count">
                 <ul style="padding-left: 5%; padding-right: 5%; padding-top: 0%; padding-bottom: 0%;">
-                    <li>Здесь вы увидите результаты поиска</li>
+                    <li>Здесь Вы увидите ответ на Ваш вопрос</li>
                 </ul>
             </div>
         </div>

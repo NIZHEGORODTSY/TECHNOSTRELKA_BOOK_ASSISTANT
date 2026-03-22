@@ -32,7 +32,6 @@ class ModelController:
     def form_prompt_from_chunks_and_question(self, chunks: list[Chunk], question: str) -> list[dict[str, str]]:
         fragments = ""
         for i in range(len(chunks)):
-            # fragment = "\\{" + str(i + 1) + "\\} "
             fragment = f"Автор: {chunks[i].author} Название: \"{chunks[i].book}\" {chunks[i].text}    "
             fragments += fragment
 
@@ -47,7 +46,7 @@ class ModelController:
             },
             {
                 "role": "system",
-                "content": "Ответь на предложенный вопрос; отвечай на него сразу, не пиши 'конечно!'"
+                "content": "Ответь на предложенный вопрос; отвечай на него сразу, не пиши 'конечно!' Постарайся цитировать предложенные фрагменты как можно чаще"
             },
             {
                 "role": "user",

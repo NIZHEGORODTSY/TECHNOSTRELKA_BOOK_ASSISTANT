@@ -7,7 +7,6 @@ from objects import *
 
 load_dotenv('_.env')
 
-
 class PineconeController:
     def __init__(self):
         self._pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
@@ -101,7 +100,6 @@ class PineconeController:
 
         return result
 
-    # TODO: сформировать список вида list[dict[str, str]] {"book": "book_title", "author": "author_name"}
     def list_all_books(self) -> dict[str, list[str]]:
         """
         Выводит список всех книг, которые есть в индексе Pinecone.
@@ -141,5 +139,3 @@ class PineconeController:
             if book_name:
                 books.add(book_name)
         return len(books)
-
-# TODO: нужно добавить статистические функции для общего числа запросов, среднего времени ответа и, по возможности, точности ответа
