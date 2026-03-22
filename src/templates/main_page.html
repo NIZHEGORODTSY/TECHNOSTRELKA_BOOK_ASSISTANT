@@ -47,13 +47,8 @@
             </div>
 
             <div class="stat-card">
-                <div class="stat-number">data</div>
+                <div class="stat-number">{{_requests}}</div>
                 <div class="stat-label">Поисковых запросов</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-number">data</div>
-                <div class="stat-label">Точность поиска</div>
             </div>
 
             <div class="stat-card">
@@ -76,6 +71,7 @@
     function redirectToPage() {
             window.location.href = "{{ url_for('search_show') }}";
         }
+
 </script>
 
 </script>

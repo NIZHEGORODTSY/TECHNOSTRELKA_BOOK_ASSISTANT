@@ -1,6 +1,5 @@
-/* Library Page Styles - Элементы растянуты по всей ширине */
-
-.library-section, .upload-section {
+.library-section,
+.upload-section {
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -175,9 +174,9 @@
     margin-top: 10px;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
-    .library-section, .upload-section {
+    .library-section,
+    .upload-section {
         padding: 20px;
     }
 
@@ -214,7 +213,8 @@
         padding: 15px;
     }
 
-    .library-section, .upload-section {
+    .library-section,
+    .upload-section {
         padding: 15px;
     }
 

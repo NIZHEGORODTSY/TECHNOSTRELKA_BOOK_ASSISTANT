@@ -29,7 +29,7 @@ app.config['SECRET_KEY'] = 'your-secret-key-here'  # для flash сообщен
 # Создаем папку для загрузок если её нет
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-mc = ModelController(temperature=1.3, max_completion_tokens=150)
+mc = ModelController(temperature=1.4, max_completion_tokens=150)
 pc = PineconeController()
 
 
@@ -157,7 +157,7 @@ def question_post():
     library = pc.list_all_books()
     books_and_authors = format_library(library)
     start_time = time.time()
-    chunks = pc.search_similar_chunks(question=user_text, author_name=author, book_name=book, top_k = 10)
+    chunks = pc.search_similar_chunks(question=user_text, author_name=author, book_name=book, top_k=10)
     prompt = mc.form_prompt_from_chunks_and_question(chunks=chunks, question=user_text)
     answer = mc.generate(prompt)
     end_time = time.time()
